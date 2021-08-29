@@ -14,9 +14,10 @@ const displaySearchIn = meals => {
   const searchMeals = document.getElementById('search-result');
   meals.forEach(meal => {
     const div = document.createElement('div');
+    div.style.cursor = "pointer";
     div.classList.add('col')
     div.innerHTML = `
-    <div class="card">
+    <div onclick="leadMealID(${meal.idMeal})" class="card">
       <img src="${meal.strMealThumb}" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">${meal.strMeal}</h5>
@@ -24,7 +25,27 @@ const displaySearchIn = meals => {
       </div>
     </div>`
     searchMeals.appendChild(div)
-    console.log(meal);
   });
 
 };
+
+const leadMealID = mealId => {
+  const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`
+  fetch(url)
+    .then(res => res.json())
+    .then(data => nextMeal(data.meals[0]))
+}
+
+const nextMeal = meal => {
+  const nextMeal = document.getElementById("next-meal");
+  const div = document.createElement('div');
+  div.classList.add('card')
+  div.innerHTML = `
+  <img src="${meal.strMealThumb}" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="${meal.strMeal}">Card title</h5>
+      </div>
+  `
+  nextMeal.appendChild(div)
+  console.log(meal)
+}
